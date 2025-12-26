@@ -317,8 +317,7 @@ public class GeneralTabViewModel implements PreferenceTabViewModel {
         if (enableHttpServerProperty.getValue()) {
             remotePreferences.setEnableHttpServer(true);
             URI uri = remotePreferences.getHttpServerUri();
-            // TODO: Fix OAuthSessionRegistry parameter
-            httpServerManager.start(preferences, stateManager, new OAuthSessionRegistry(), uri);
+            httpServerManager.start(preferences, stateManager, OAuthSessionRegistry.getInstance(), uri);
         } else {
             remotePreferences.setEnableHttpServer(false);
             httpServerManager.stop();

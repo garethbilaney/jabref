@@ -17,6 +17,8 @@ import org.jabref.model.database.BibDatabaseContext;
 import com.nimbusds.oauth2.sdk.token.AccessToken;
 import kong.unirest.core.HttpResponse;
 import kong.unirest.core.Unirest;
+import kong.unirest.core.json.JSONObject;
+import kong.unirest.core.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +48,27 @@ public class CiteDrivePush {
             LOGGER.error("CiteDrive push failed: {} - {}", response.getStatus(), response.getBody());
             notificationService.notify(Localization.lang("CiteDrive push failed: %0", response.getStatus() + " " + response.getBody()));
         });
-        httpResponse.ifSuccess(_ -> notificationService.notify(Localization.lang("CiteDrive push succeeded.")));
+        httpResponse.ifSuccess(response -> {
+            String body = response.getBody();
+            String message;
+            try {
+                JSONObject jsonResponse = new JSONObject(body);
+                int entryCount = jsonResponse.optInt("entry_count", 0);
+                double fileSizeKb = jsonResponse.optDouble("file_size_kb", 0.0);
+                
+                if (entryCount > 0) {
+                    message = Localization.lang("CiteDrive push succeeded: %0 entries (%1 KB)", 
+                            String.valueOf(entryCount), 
+                            String.valueOf(fileSizeKb));
+                } else {
+                    message = Localization.lang("CiteDrive push succeeded: %0 KB", 
+                            String.valueOf(fileSizeKb));
+                }
+            } catch (JSONException e) {
+                LOGGER.warn("Could not parse CiteDrive push response: {}", body, e);
+                message = Localization.lang("CiteDrive push succeeded.");
+            }
+            notificationService.notify(message);
+        });
     }
 }

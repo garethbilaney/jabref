@@ -22,7 +22,7 @@ public class CiteDriveLoginAction extends SimpleCommand {
         this.dialogService = dialogService;
         this.stateManager = stateManager;
         this.preferences = preferences;
-        this.citeDriveOAuthService = new CiteDriveOAuthService(preferences.getExternalApplicationsPreferences(), preferences.getRemotePreferences(), preferences.getCiteDrivePreferences(), new OAuthSessionRegistry(), dialogService);
+        this.citeDriveOAuthService = new CiteDriveOAuthService(preferences.getExternalApplicationsPreferences(), preferences.getRemotePreferences(), preferences.getCiteDrivePreferences(), OAuthSessionRegistry.getInstance(), dialogService);
 
         this.executable.bind(ActionHelper.needsDatabase(stateManager));
     }

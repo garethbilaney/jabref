@@ -439,8 +439,7 @@ public class JabRefGUI extends Application {
         }
 
         if (remotePreferences.enableHttpServer()) {
-            // TODO: Fix OAuthSessionRegistry - should be more global
-            httpServerManager.start(preferences, stateManager, new OAuthSessionRegistry(), remotePreferences.getHttpServerUri());
+            httpServerManager.start(preferences, stateManager, OAuthSessionRegistry.getInstance(), remotePreferences.getHttpServerUri());
         }
         if (remotePreferences.enableLanguageServer()) {
             languageServerController.start(cliMessageHandler, remotePreferences.getLanguageServerPort());

@@ -10,8 +10,16 @@ import org.slf4j.LoggerFactory;
 public class OAuthSessionRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuthSessionRegistry.class);
+    private static final OAuthSessionRegistry INSTANCE = new OAuthSessionRegistry();
 
     private final Map<String, CompletableFuture<String>> pending = new ConcurrentHashMap<>();
+
+    public static OAuthSessionRegistry getInstance() {
+        return INSTANCE;
+    }
+
+    private OAuthSessionRegistry() {
+    }
 
     public CompletableFuture<String> register(String state) {
         var future = new CompletableFuture<String>();

@@ -77,8 +77,7 @@ public class ServerCli implements Callable<Void> {
             return null;
         }
 
-        // TODO: Fix parameter
-        Server server = new Server(JabRefCliPreferences.getInstance(), new OAuthSessionRegistry());
+        Server server = new Server(JabRefCliPreferences.getInstance(), OAuthSessionRegistry.getInstance());
         HttpServer httpServer = server.run(filesToServe, uri);
 
         // Keep the http server running until user kills the process (e.g., presses Ctrl+C)
